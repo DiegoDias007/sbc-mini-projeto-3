@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Hexágono de Nen</title>
+  <rect width="780" height="560" rx="16" fill="#ffffff"/>
+
+  <!-- Arestas do hexágono: cada aresta liga dois tipos adjacentes -->
+  <polygon points="390,80 563,180 563,380 390,480 217,380 217,180"
+           fill="#f6f8fa" stroke="#8c959f" stroke-width="3"/>
+
+  <text x="390" y="272" text-anchor="middle" font-size="15" fill="#57606a">tipos vizinhos =</text>
+  <text x="390" y="294" text-anchor="middle" font-size="15" fill="#57606a">aprendizado mais fácil</text>
+
+  <!-- Intensificação (topo) -->
+  <rect x="265" y="50" width="250" height="60" rx="12" fill="#ffe2e0" stroke="#cf222e" stroke-width="2"/>
+  <text x="390" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="#82071e">Intensificação</text>
+  <text x="390" y="96" text-anchor="middle" font-size="12" fill="#24292f">Gon, Wing, Nobunaga, Uvogin</text>
+
+  <!-- Transformação (superior direito) -->
+  <rect x="438" y="150" width="250" height="60" rx="12" fill="#fff1c2" stroke="#bf8700" stroke-width="2"/>
+  <text x="563" y="174" text-anchor="middle" font-size="16" font-weight="700" fill="#7d4e00">Transformação</text>
+  <text x="563" y="196" text-anchor="middle" font-size="12" fill="#24292f">Killua, Hisoka, Biscuit, Feitan, Machi</text>
+
+  <!-- Materialização (inferior direito) -->
+  <rect x="438" y="350" width="250" height="60" rx="12" fill="#dafbe1" stroke="#1a7f37" stroke-width="2"/>
+  <text x="563" y="374" text-anchor="middle" font-size="16" font-weight="700" fill="#044f1e">Materialização</text>
+  <text x="563" y="396" text-anchor="middle" font-size="12" fill="#24292f">Kurapika, Kite</text>
+
+  <!-- Especialização (base) -->
+  <rect x="265" y="450" width="250" height="60" rx="12" fill="#fbefff" stroke="#8250df" stroke-width="2"/>
+  <text x="390" y="474" text-anchor="middle" font-size="16" font-weight="700" fill="#512a97">Especialização</text>
+  <text x="390" y="496" text-anchor="middle" font-size="12" fill="#24292f">Chrollo, Pakunoda, Neferpitou</text>
+
+  <!-- Manipulação (inferior esquerdo) -->
+  <rect x="92" y="350" width="250" height="60" rx="12" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="217" y="374" text-anchor="middle" font-size="16" font-weight="700" fill="#0a3069">Manipulação</text>
+  <text x="217" y="396" text-anchor="middle" font-size="12" fill="#24292f">Illumi, Shalnark</text>
+
+  <!-- Emissão (superior esquerdo) -->
+  <rect x="92" y="150" width="250" height="60" rx="12" fill="#ffe7d1" stroke="#bc4c00" stroke-width="2"/>
+  <text x="217" y="174" text-anchor="middle" font-size="16" font-weight="700" fill="#762c00">Emissão</text>
+  <text x="217" y="196" text-anchor="middle" font-size="12" fill="#24292f">Leorio</text>
+
+  <text x="390" y="540" text-anchor="middle" font-size="12" fill="#57606a">Personagens da base agrupados pelo seu tipo de Nen natural</text>
+</svg>
