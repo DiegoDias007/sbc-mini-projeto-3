@@ -1,0 +1,516 @@
+@prefix hxh:  <http://example.org/hxh#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+#  Base de conhecimento: universo de Hunter x Hunter
+#  Mini-Projeto 3 - Sistemas Baseados em Conhecimento
+#
+#  Fonte dos fatos: anime de 2011 e a lista de personagens da Wikipedia.
+#  Fatos que a obra nunca revelou (ex.: o tipo de Nen do Ging) ficam
+#  de fora de propósito: a base só registra o que é canônico.
+# =====================================================================
+
+<http://example.org/hxh> a owl:Ontology ;
+    rdfs:label "Ontologia de Hunter x Hunter"@pt ;
+    rdfs:comment "Personagens, organizações, o sistema de Nen, habilidades, locais e arcos de Hunter x Hunter."@pt .
+
+# =====================================================================
+#  1. CLASSES
+# =====================================================================
+
+# --- Personagens --------------------------------------------------------
+
+hxh:Personagem a owl:Class ;
+    rdfs:label "Personagem"@pt ;
+    rdfs:comment "Qualquer ser com nome próprio na história."@pt .
+
+hxh:Humano a owl:Class ;
+    rdfs:subClassOf hxh:Personagem ;
+    rdfs:label "Humano"@pt .
+
+hxh:FormigaQuimera a owl:Class ;
+    rdfs:subClassOf hxh:Personagem ;
+    rdfs:label "Formiga Quimera"@pt ;
+    rdfs:comment "Espécie que nasce da Rainha Quimera e herda traços das criaturas que ela devora."@pt ;
+    # Uma formiga quimera não é humana, mesmo quando tem aparência humana.
+    owl:disjointWith hxh:Humano .
+
+# Hunter é uma classe DEFINIDA, não apenas declarada: qualquer humano com
+# licença Hunter é automaticamente classificado como Hunter pelo raciocinador.
+hxh:Hunter a owl:Class ;
+    rdfs:subClassOf hxh:Humano ;
+    rdfs:label "Hunter"@pt ;
+    rdfs:comment "Humano que passou no Exame Hunter e tem a licença."@pt ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            hxh:Humano
+            [ a owl:Restriction ;
+              owl:onProperty hxh:possuiLicenca ;
+              owl:hasValue true ]
+        )
+    ] .
+
+hxh:HunterEstrela a owl:Class ;
+    rdfs:subClassOf hxh:Hunter ;
+    rdfs:label "Hunter Estrela"@pt ;
+    rdfs:comment "Hunter condecorado com uma, duas ou três estrelas por feitos na sua área."@pt .
+
+hxh:Assassino a owl:Class ;
+    rdfs:subClassOf hxh:Humano ;
+    rdfs:label "Assassino"@pt ;
+    rdfs:comment "Humano treinado como assassino profissional, como os membros da Família Zoldyck."@pt .
+
+hxh:Rei a owl:Class ;
+    rdfs:subClassOf hxh:FormigaQuimera ;
+    rdfs:label "Rei"@pt .
+
+hxh:GuardaReal a owl:Class ;
+    rdfs:subClassOf hxh:FormigaQuimera ;
+    rdfs:label "Guarda Real"@pt ;
+    rdfs:comment "Os três guardas pessoais do Rei."@pt .
+
+hxh:ComandanteDeEsquadrao a owl:Class ;
+    rdfs:subClassOf hxh:FormigaQuimera ;
+    rdfs:label "Comandante de Esquadrão"@pt .
+
+# --- Sistema de Nen ----------------------------------------------------
+
+# São exatamente seis tipos, nem mais nem menos: a classe é uma
+# enumeração fechada (owl:oneOf).
+hxh:TipoDeNen a owl:Class ;
+    rdfs:label "Tipo de Nen"@pt ;
+    rdfs:comment "Afinidade natural de um usuário de Nen. Os seis tipos formam um hexágono."@pt ;
+    owl:oneOf ( hxh:Intensificacao hxh:Transformacao hxh:Materializacao
+                hxh:Especializacao hxh:Manipulacao hxh:Emissao ) .
+
+hxh:Habilidade a owl:Class ;
+    rdfs:label "Habilidade"@pt ;
+    rdfs:comment "Técnica pessoal de Nen (Hatsu) criada por um personagem."@pt .
+
+# --- Mundo --------------------------------------------------------------
+
+hxh:Organizacao a owl:Class ;
+    rdfs:label "Organização"@pt .
+
+hxh:Local a owl:Class ;
+    rdfs:label "Local"@pt .
+
+hxh:Arco a owl:Class ;
+    rdfs:label "Arco"@pt ;
+    rdfs:comment "Trecho da história com início e fim definidos no anime de 2011."@pt .
+
+# Categorias de topo nunca se misturam.
+hxh:Personagem owl:disjointWith hxh:Organizacao , hxh:Local , hxh:Arco , hxh:Habilidade , hxh:TipoDeNen .
+hxh:Local      owl:disjointWith hxh:Organizacao , hxh:Arco .
+
+# =====================================================================
+#  2. PROPRIEDADES DE OBJETO
+# =====================================================================
+
+# Cada personagem nasce com um único tipo de Nen.
+hxh:tipoNenNatural a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "tipo de Nen natural"@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  hxh:TipoDeNen .
+
+# Vizinhança no hexágono de Nen. Se A é vizinho de B, B é vizinho de A.
+hxh:adjacenteA a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:label "adjacente a"@pt ;
+    rdfs:domain hxh:TipoDeNen ;
+    rdfs:range  hxh:TipoDeNen .
+
+# Ninguém é mestre de si mesmo. Não é transitiva de propósito:
+# o mestre do meu mestre não me ensinou nada diretamente.
+hxh:mestreDe a owl:ObjectProperty , owl:IrreflexiveProperty ;
+    rdfs:label "mestre de"@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  hxh:Personagem ;
+    owl:inverseOf hxh:discipuloDe .
+
+hxh:discipuloDe a owl:ObjectProperty ;
+    rdfs:label "discípulo de"@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  hxh:Personagem .
+
+hxh:membroDe a owl:ObjectProperty ;
+    rdfs:label "membro de"@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  hxh:Organizacao ;
+    owl:inverseOf hxh:temMembro .
+
+hxh:temMembro a owl:ObjectProperty ;
+    rdfs:label "tem membro"@pt ;
+    rdfs:domain hxh:Organizacao ;
+    rdfs:range  hxh:Personagem .
+
+# Se A fica em B e B fica em C, então A fica em C.
+hxh:localizadoEm a owl:ObjectProperty , owl:TransitiveProperty ;
+    rdfs:label "localizado em"@pt ;
+    rdfs:domain hxh:Local ;
+    rdfs:range  hxh:Local .
+
+hxh:nasceuEm a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "nasceu em"@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  hxh:Local .
+
+hxh:possuiHabilidade a owl:ObjectProperty ;
+    rdfs:label "possui habilidade"@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  hxh:Habilidade .
+
+hxh:categoriaDaHabilidade a owl:ObjectProperty ;
+    rdfs:label "categoria da habilidade"@pt ;
+    rdfs:domain hxh:Habilidade ;
+    rdfs:range  hxh:TipoDeNen .
+
+hxh:apareceEm a owl:ObjectProperty ;
+    rdfs:label "aparece em"@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  hxh:Arco .
+
+# =====================================================================
+#  3. PROPRIEDADES DE DADOS
+# =====================================================================
+
+# Uma pessoa tem ou não tem licença: nunca as duas coisas.
+hxh:possuiLicenca a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "possui licença Hunter"@pt ;
+    rdfs:domain hxh:Humano ;
+    rdfs:range  xsd:boolean .
+
+# Só Hunters Estrela têm estrelas, então quem tem estrelas é Hunter Estrela.
+hxh:numeroDeEstrelas a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "número de estrelas"@pt ;
+    rdfs:domain hxh:HunterEstrela ;
+    rdfs:range  xsd:integer .
+
+hxh:numeroNaTrupe a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "número na Trupe Fantasma"@pt ;
+    rdfs:comment "Número tatuado na aranha de cada membro da Trupe Fantasma (0 a 12)."@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  xsd:integer .
+
+hxh:idade a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "idade"@pt ;
+    rdfs:comment "Idade do personagem na sua primeira aparição."@pt ;
+    rdfs:domain hxh:Personagem ;
+    rdfs:range  xsd:integer .
+
+hxh:episodioInicial a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "episódio inicial"@pt ;
+    rdfs:domain hxh:Arco ;
+    rdfs:range  xsd:integer .
+
+hxh:episodioFinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "episódio final"@pt ;
+    rdfs:domain hxh:Arco ;
+    rdfs:range  xsd:integer .
+
+# =====================================================================
+#  4. INDIVÍDUOS
+# =====================================================================
+
+# --- Os seis tipos de Nen e o hexágono ---------------------------------
+#
+#            Intensificação
+#     Emissão               Transformação
+#   Manipulação             Materialização
+#            Especialização
+#
+# Só uma direção de cada aresta é declarada; a outra é inferida pela
+# simetria de hxh:adjacenteA.
+
+hxh:Intensificacao a hxh:TipoDeNen ; rdfs:label "Intensificação"@pt ;
+    hxh:adjacenteA hxh:Transformacao .
+hxh:Transformacao  a hxh:TipoDeNen ; rdfs:label "Transformação"@pt ;
+    hxh:adjacenteA hxh:Materializacao .
+hxh:Materializacao a hxh:TipoDeNen ; rdfs:label "Materialização"@pt ;
+    hxh:adjacenteA hxh:Especializacao .
+hxh:Especializacao a hxh:TipoDeNen ; rdfs:label "Especialização"@pt ;
+    hxh:adjacenteA hxh:Manipulacao .
+hxh:Manipulacao    a hxh:TipoDeNen ; rdfs:label "Manipulação"@pt ;
+    hxh:adjacenteA hxh:Emissao .
+hxh:Emissao        a hxh:TipoDeNen ; rdfs:label "Emissão"@pt ;
+    hxh:adjacenteA hxh:Intensificacao .
+
+# --- Locais --------------------------------------------------------------
+
+hxh:IlhaDaBaleia     a hxh:Local ; rdfs:label "Ilha da Baleia"@pt .
+hxh:Padokea          a hxh:Local ; rdfs:label "República de Padokea"@pt .
+hxh:RegiaoDentora    a hxh:Local ; rdfs:label "Região de Dentora"@pt ;
+    hxh:localizadoEm hxh:Padokea .
+hxh:MontanhaKukuroo  a hxh:Local ; rdfs:label "Montanha Kukuroo"@pt ;
+    hxh:localizadoEm hxh:RegiaoDentora .
+hxh:ProvinciaLukso   a hxh:Local ; rdfs:label "Província de Lukso"@pt .
+hxh:MeteorCity       a hxh:Local ; rdfs:label "Meteor City"@pt .
+hxh:Yorknew          a hxh:Local ; rdfs:label "Cidade de Yorknew"@pt .
+hxh:UniaoMitene      a hxh:Local ; rdfs:label "União Mitene"@pt .
+hxh:NGL              a hxh:Local ; rdfs:label "Neo-Green Life (NGL)"@pt ;
+    hxh:localizadoEm hxh:UniaoMitene .
+hxh:GorteauOriental  a hxh:Local ; rdfs:label "República de Gorteau Oriental"@pt ;
+    hxh:localizadoEm hxh:UniaoMitene .
+
+# --- Arcos (episódios do anime de 2011) ---------------------------------
+
+hxh:ArcoExameHunter    a hxh:Arco ; rdfs:label "Exame Hunter"@pt ;
+    hxh:episodioInicial 1   ; hxh:episodioFinal 21 .
+hxh:ArcoZoldyck        a hxh:Arco ; rdfs:label "Família Zoldyck"@pt ;
+    hxh:episodioInicial 22  ; hxh:episodioFinal 26 .
+hxh:ArcoTorreCelestial a hxh:Arco ; rdfs:label "Torre Celestial"@pt ;
+    hxh:episodioInicial 27  ; hxh:episodioFinal 36 .
+hxh:ArcoYorknew        a hxh:Arco ; rdfs:label "Cidade de Yorknew"@pt ;
+    hxh:episodioInicial 37  ; hxh:episodioFinal 58 .
+hxh:ArcoGreedIsland    a hxh:Arco ; rdfs:label "Greed Island"@pt ;
+    hxh:episodioInicial 59  ; hxh:episodioFinal 75 .
+hxh:ArcoFormigas       a hxh:Arco ; rdfs:label "Formigas Quimera"@pt ;
+    hxh:episodioInicial 76  ; hxh:episodioFinal 136 .
+hxh:ArcoEleicao        a hxh:Arco ; rdfs:label "Eleição do 13º Presidente"@pt ;
+    hxh:episodioInicial 137 ; hxh:episodioFinal 148 .
+
+# --- Organizações -------------------------------------------------------
+
+hxh:AssociacaoHunter  a hxh:Organizacao ; rdfs:label "Associação Hunter"@pt .
+hxh:Zodiacos          a hxh:Organizacao ; rdfs:label "Doze Zodíacos"@pt ;
+    rdfs:comment "Conselho dos doze Hunters mais fortes da Associação, cada um com um signo."@pt .
+hxh:TrupeFantasma     a hxh:Organizacao ; rdfs:label "Trupe Fantasma"@pt ;
+    rdfs:comment "Grupo de ladrões de 13 membros, cada um com uma aranha numerada tatuada."@pt .
+hxh:FamiliaZoldyck    a hxh:Organizacao ; rdfs:label "Família Zoldyck"@pt .
+hxh:ReinoQuimera      a hxh:Organizacao ; rdfs:label "Reino das Formigas Quimera"@pt .
+
+# --- Habilidades ----------------------------------------------------------
+
+hxh:Jajanken a hxh:Habilidade ; rdfs:label "Jajanken"@pt ;
+    rdfs:comment "Golpe inspirado no pedra-papel-tesoura; a 'pedra' é um soco intensificado."@pt ;
+    hxh:categoriaDaHabilidade hxh:Intensificacao .
+hxh:Godspeed a hxh:Habilidade ; rdfs:label "Godspeed (Kanmuru)"@pt ;
+    rdfs:comment "Converte a aura em eletricidade para se mover a velocidades absurdas."@pt ;
+    hxh:categoriaDaHabilidade hxh:Transformacao .
+hxh:CorrenteDaPrisao a hxh:Habilidade ; rdfs:label "Corrente da Prisão (Chain Jail)"@pt ;
+    rdfs:comment "Corrente materializada que só funciona contra membros da Trupe Fantasma."@pt ;
+    hxh:categoriaDaHabilidade hxh:Materializacao .
+hxh:EmperorTime a hxh:Habilidade ; rdfs:label "Emperor Time"@pt ;
+    rdfs:comment "Com os olhos escarlates, Kurapika usa todos os tipos de Nen com 100% de eficiência."@pt ;
+    hxh:categoriaDaHabilidade hxh:Especializacao .
+hxh:BungeeGum a hxh:Habilidade ; rdfs:label "Bungee Gum"@pt ;
+    rdfs:comment "Aura com propriedades de borracha e chiclete."@pt ;
+    hxh:categoriaDaHabilidade hxh:Transformacao .
+hxh:TextureSurprise a hxh:Habilidade ; rdfs:label "Texture Surprise"@pt ;
+    rdfs:comment "Aura que imita a textura de qualquer superfície."@pt ;
+    hxh:categoriaDaHabilidade hxh:Transformacao .
+hxh:SkillHunter a hxh:Habilidade ; rdfs:label "Skill Hunter"@pt ;
+    rdfs:comment "Livro que rouba as habilidades de outros usuários de Nen."@pt ;
+    hxh:categoriaDaHabilidade hxh:Especializacao .
+hxh:CrazySlots a hxh:Habilidade ; rdfs:label "Crazy Slots"@pt ;
+    rdfs:comment "Caça-níquel materializado que sorteia a arma usada na luta."@pt ;
+    hxh:categoriaDaHabilidade hxh:Materializacao .
+hxh:BigBangImpact a hxh:Habilidade ; rdfs:label "Big Bang Impact"@pt ;
+    rdfs:comment "Soco com a força de um míssil."@pt ;
+    hxh:categoriaDaHabilidade hxh:Intensificacao .
+hxh:BodhisattvaCemFormas a hxh:Habilidade ; rdfs:label "Bodhisattva Guanyin de Cem Formas"@pt ;
+    rdfs:comment "Estátua gigante de aura que golpeia mais rápido do que o olho acompanha."@pt .
+
+# --- Protagonistas --------------------------------------------------------
+
+hxh:Gon a hxh:Humano ; rdfs:label "Gon Freecss"@pt ;
+    hxh:idade 12 ;
+    hxh:possuiLicenca true ;
+    hxh:tipoNenNatural hxh:Intensificacao ;
+    hxh:nasceuEm hxh:IlhaDaBaleia ;
+    hxh:possuiHabilidade hxh:Jajanken ;
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoZoldyck , hxh:ArcoTorreCelestial ,
+                  hxh:ArcoYorknew , hxh:ArcoGreedIsland , hxh:ArcoFormigas , hxh:ArcoEleicao .
+
+# Killua foi desclassificado no primeiro Exame Hunter que fez.
+hxh:Killua a hxh:Humano , hxh:Assassino ; rdfs:label "Killua Zoldyck"@pt ;
+    hxh:idade 12 ;
+    hxh:possuiLicenca false ;
+    hxh:tipoNenNatural hxh:Transformacao ;
+    hxh:nasceuEm hxh:MontanhaKukuroo ;
+    hxh:membroDe hxh:FamiliaZoldyck ;
+    hxh:possuiHabilidade hxh:Godspeed ;
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoZoldyck , hxh:ArcoTorreCelestial ,
+                  hxh:ArcoYorknew , hxh:ArcoGreedIsland , hxh:ArcoFormigas , hxh:ArcoEleicao .
+
+hxh:Kurapika a hxh:Humano ; rdfs:label "Kurapika"@pt ;
+    hxh:idade 17 ;
+    hxh:possuiLicenca true ;
+    hxh:tipoNenNatural hxh:Materializacao ;
+    hxh:nasceuEm hxh:ProvinciaLukso ;
+    hxh:possuiHabilidade hxh:CorrenteDaPrisao , hxh:EmperorTime ;
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoYorknew .
+
+hxh:Leorio a hxh:Humano ; rdfs:label "Leorio Paladiknight"@pt ;
+    hxh:idade 19 ;
+    hxh:possuiLicenca true ;
+    hxh:tipoNenNatural hxh:Emissao ;
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoYorknew , hxh:ArcoEleicao .
+
+# --- Hunters e mestres -----------------------------------------------------
+
+hxh:Netero a hxh:Humano ; rdfs:label "Isaac Netero"@pt ;
+    hxh:possuiLicenca true ;
+    hxh:membroDe hxh:AssociacaoHunter ;
+    hxh:possuiHabilidade hxh:BodhisattvaCemFormas ;
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoFormigas .
+
+# Não declaramos que Biscuit é Hunter: o raciocinador deduz isso porque
+# só Hunters Estrela têm hxh:numeroDeEstrelas.
+hxh:Biscuit a hxh:Humano ; rdfs:label "Biscuit Krueger"@pt ;
+    hxh:idade 57 ;
+    hxh:numeroDeEstrelas 2 ;
+    hxh:tipoNenNatural hxh:Transformacao ;
+    hxh:mestreDe hxh:Wing , hxh:Gon , hxh:Killua ;
+    hxh:apareceEm hxh:ArcoGreedIsland .
+
+hxh:Wing a hxh:Humano ; rdfs:label "Wing"@pt ;
+    hxh:tipoNenNatural hxh:Intensificacao ;
+    hxh:mestreDe hxh:Gon , hxh:Killua , hxh:Zushi ;
+    hxh:apareceEm hxh:ArcoTorreCelestial .
+
+hxh:Zushi a hxh:Humano ; rdfs:label "Zushi"@pt ;
+    hxh:apareceEm hxh:ArcoTorreCelestial .
+
+hxh:Ging a hxh:Humano ; rdfs:label "Ging Freecss"@pt ;
+    hxh:numeroDeEstrelas 2 ;
+    hxh:nasceuEm hxh:IlhaDaBaleia ;
+    hxh:membroDe hxh:Zodiacos ;
+    hxh:mestreDe hxh:Kite ;
+    hxh:apareceEm hxh:ArcoEleicao .
+
+hxh:Kite a hxh:Humano ; rdfs:label "Kite"@pt ;
+    hxh:possuiLicenca true ;
+    hxh:tipoNenNatural hxh:Materializacao ;
+    hxh:possuiHabilidade hxh:CrazySlots ;
+    hxh:apareceEm hxh:ArcoFormigas .
+
+hxh:Izunavi a hxh:Humano ; rdfs:label "Izunavi"@pt ;
+    hxh:possuiLicenca true ;
+    hxh:mestreDe hxh:Kurapika .
+
+hxh:Cheadle a hxh:Humano ; rdfs:label "Cheadle Yorkshire"@pt ;
+    hxh:numeroDeEstrelas 3 ;
+    hxh:membroDe hxh:Zodiacos ;
+    hxh:apareceEm hxh:ArcoEleicao .
+
+hxh:Pariston a hxh:Humano ; rdfs:label "Pariston Hill"@pt ;
+    hxh:possuiLicenca true ;
+    hxh:membroDe hxh:Zodiacos ;
+    hxh:apareceEm hxh:ArcoEleicao .
+
+# --- Família Zoldyck ----------------------------------------------------
+
+hxh:Illumi a hxh:Humano , hxh:Assassino ; rdfs:label "Illumi Zoldyck"@pt ;
+    hxh:possuiLicenca true ;
+    hxh:tipoNenNatural hxh:Manipulacao ;
+    hxh:nasceuEm hxh:MontanhaKukuroo ;
+    hxh:membroDe hxh:FamiliaZoldyck ;
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoEleicao .
+
+hxh:Silva a hxh:Humano , hxh:Assassino ; rdfs:label "Silva Zoldyck"@pt ;
+    hxh:membroDe hxh:FamiliaZoldyck ;
+    hxh:apareceEm hxh:ArcoZoldyck , hxh:ArcoYorknew .
+
+hxh:Kalluto a hxh:Humano , hxh:Assassino ; rdfs:label "Kalluto Zoldyck"@pt ;
+    hxh:nasceuEm hxh:MontanhaKukuroo ;
+    hxh:membroDe hxh:FamiliaZoldyck ;
+    hxh:apareceEm hxh:ArcoZoldyck , hxh:ArcoFormigas .
+
+hxh:Alluka a hxh:Humano ; rdfs:label "Alluka Zoldyck"@pt ;
+    hxh:nasceuEm hxh:MontanhaKukuroo ;
+    hxh:membroDe hxh:FamiliaZoldyck ;
+    hxh:apareceEm hxh:ArcoEleicao .
+
+# --- Trupe Fantasma ------------------------------------------------------
+
+hxh:Chrollo a hxh:Humano ; rdfs:label "Chrollo Lucilfer"@pt ;
+    hxh:numeroNaTrupe 0 ;
+    hxh:tipoNenNatural hxh:Especializacao ;
+    hxh:nasceuEm hxh:MeteorCity ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:possuiHabilidade hxh:SkillHunter ;
+    hxh:apareceEm hxh:ArcoYorknew .
+
+hxh:Nobunaga a hxh:Humano ; rdfs:label "Nobunaga Hazama"@pt ;
+    hxh:numeroNaTrupe 1 ;
+    hxh:tipoNenNatural hxh:Intensificacao ;
+    hxh:nasceuEm hxh:MeteorCity ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:apareceEm hxh:ArcoYorknew .
+
+hxh:Feitan a hxh:Humano ; rdfs:label "Feitan Portor"@pt ;
+    hxh:numeroNaTrupe 2 ;
+    hxh:tipoNenNatural hxh:Transformacao ;
+    hxh:nasceuEm hxh:MeteorCity ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:apareceEm hxh:ArcoYorknew , hxh:ArcoFormigas .
+
+hxh:Machi a hxh:Humano ; rdfs:label "Machi Komacine"@pt ;
+    hxh:numeroNaTrupe 3 ;
+    hxh:tipoNenNatural hxh:Transformacao ;
+    hxh:nasceuEm hxh:MeteorCity ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:apareceEm hxh:ArcoYorknew .
+
+# Hisoka entrou na Trupe só para lutar com Chrollo; a tatuagem dele era falsa.
+hxh:Hisoka a hxh:Humano ; rdfs:label "Hisoka Morow"@pt ;
+    hxh:numeroNaTrupe 4 ;
+    hxh:possuiLicenca true ;
+    hxh:tipoNenNatural hxh:Transformacao ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:possuiHabilidade hxh:BungeeGum , hxh:TextureSurprise ;
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoTorreCelestial , hxh:ArcoYorknew , hxh:ArcoGreedIsland .
+
+hxh:Shalnark a hxh:Humano ; rdfs:label "Shalnark"@pt ;
+    hxh:numeroNaTrupe 6 ;
+    hxh:tipoNenNatural hxh:Manipulacao ;
+    hxh:nasceuEm hxh:MeteorCity ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:apareceEm hxh:ArcoYorknew .
+
+hxh:Pakunoda a hxh:Humano ; rdfs:label "Pakunoda"@pt ;
+    hxh:numeroNaTrupe 9 ;
+    hxh:tipoNenNatural hxh:Especializacao ;
+    hxh:nasceuEm hxh:MeteorCity ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:apareceEm hxh:ArcoYorknew .
+
+hxh:Uvogin a hxh:Humano ; rdfs:label "Uvogin"@pt ;
+    hxh:numeroNaTrupe 11 ;
+    hxh:tipoNenNatural hxh:Intensificacao ;
+    hxh:nasceuEm hxh:MeteorCity ;
+    hxh:membroDe hxh:TrupeFantasma ;
+    hxh:possuiHabilidade hxh:BigBangImpact ;
+    hxh:apareceEm hxh:ArcoYorknew .
+
+# --- Formigas Quimera ----------------------------------------------------
+
+hxh:Meruem a hxh:Rei ; rdfs:label "Meruem"@pt ;
+    hxh:nasceuEm hxh:NGL ;
+    hxh:membroDe hxh:ReinoQuimera ;
+    hxh:apareceEm hxh:ArcoFormigas .
+
+hxh:Neferpitou a hxh:GuardaReal ; rdfs:label "Neferpitou"@pt ;
+    hxh:tipoNenNatural hxh:Especializacao ;
+    hxh:nasceuEm hxh:NGL ;
+    hxh:membroDe hxh:ReinoQuimera ;
+    hxh:apareceEm hxh:ArcoFormigas .
+
+hxh:Shaiapouf a hxh:GuardaReal ; rdfs:label "Shaiapouf"@pt ;
+    hxh:nasceuEm hxh:NGL ;
+    hxh:membroDe hxh:ReinoQuimera ;
+    hxh:apareceEm hxh:ArcoFormigas .
+
+hxh:Menthuthuyoupi a hxh:GuardaReal ; rdfs:label "Menthuthuyoupi"@pt ;
+    hxh:nasceuEm hxh:NGL ;
+    hxh:membroDe hxh:ReinoQuimera ;
+    hxh:apareceEm hxh:ArcoFormigas .
+
+hxh:Colt a hxh:ComandanteDeEsquadrao ; rdfs:label "Colt"@pt ;
+    hxh:nasceuEm hxh:NGL ;
+    hxh:membroDe hxh:ReinoQuimera ;
+    hxh:apareceEm hxh:ArcoFormigas .
