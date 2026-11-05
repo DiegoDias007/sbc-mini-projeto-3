@@ -226,7 +226,7 @@ O `g.triples((s, p, o))` busca triplas por padrão. O que for `None` funciona co
 | T1 | `(Gon, None, None)` | O que a base sabe sobre o Gon? | 18 fatos, 4 deles deduzidos (é Hunter, é Personagem, discípulo de Wing e Biscuit...) |
 | T2 | `(None, mestreDe, None)` | Quem ensinou quem? | 8 pares mestre → discípulo |
 | T3 | `(None, None, Intensificação)` | O que se liga à Intensificação? | 4 usuários, 2 habilidades e os 2 tipos vizinhos |
-| T4 | `(Kurapika, possuiHabilidade, None)` | Quais as habilidades do Kurapika? | Corrente da Prisão e Emperor Time |
+| T4 | `(Kurapika, possuiHabilidade, None)` | Quais as habilidades do Kurapika? | Chain Jail e Emperor Time |
 | T5 | `(None, rdf:type, Hunter)` | Quem é Hunter? | 12 Hunters, **todos deduzidos**. Killua não aparece: ainda não tem licença |
 | T6 | `(Kukuroo, None, Padokea)` | Como Kukuroo se liga a Padokea? | "localizado em", **deduzido** por transitividade |
 

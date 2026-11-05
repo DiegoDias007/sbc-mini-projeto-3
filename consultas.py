@@ -212,7 +212,7 @@ def parte1_triples(g: Graph) -> None:
 
     # T4. Sujeito e predicado fixos: (Kurapika, possuiHabilidade, None)
     # Busca as habilidades de um personagem específico.
-    # Esperado: Corrente da Prisão e Emperor Time.
+    # Esperado: Chain Jail e Emperor Time.
     titulo_consulta("T4", "Habilidades do Kurapika (sujeito + predicado fixos)")
     triplas_legiveis(g, (HXH.Kurapika, HXH.possuiHabilidade, None))
 

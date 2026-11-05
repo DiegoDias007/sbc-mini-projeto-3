@@ -261,7 +261,7 @@ hxh:ArcoExameHunter    a hxh:Arco ; rdfs:label "Exame Hunter"@pt ;
     hxh:episodioInicial 1   ; hxh:episodioFinal 21 .
 hxh:ArcoZoldyck        a hxh:Arco ; rdfs:label "Família Zoldyck"@pt ;
     hxh:episodioInicial 22  ; hxh:episodioFinal 26 .
-hxh:ArcoTorreCelestial a hxh:Arco ; rdfs:label "Torre Celestial"@pt ;
+hxh:ArcoArenaCelestial a hxh:Arco ; rdfs:label "Arena Celestial"@pt ;
     hxh:episodioInicial 27  ; hxh:episodioFinal 36 .
 hxh:ArcoYorknew        a hxh:Arco ; rdfs:label "Cidade de Yorknew"@pt ;
     hxh:episodioInicial 37  ; hxh:episodioFinal 58 .
@@ -287,10 +287,10 @@ hxh:ReinoQuimera      a hxh:Organizacao ; rdfs:label "Reino das Formigas Quimera
 hxh:Jajanken a hxh:Habilidade ; rdfs:label "Jajanken"@pt ;
     rdfs:comment "Golpe inspirado no pedra-papel-tesoura; a 'pedra' é um soco intensificado."@pt ;
     hxh:categoriaDaHabilidade hxh:Intensificacao .
-hxh:Godspeed a hxh:Habilidade ; rdfs:label "Godspeed (Kanmuru)"@pt ;
+hxh:Godspeed a hxh:Habilidade ; rdfs:label "Godspeed"@pt ;
     rdfs:comment "Converte a aura em eletricidade para se mover a velocidades absurdas."@pt ;
     hxh:categoriaDaHabilidade hxh:Transformacao .
-hxh:CorrenteDaPrisao a hxh:Habilidade ; rdfs:label "Corrente da Prisão (Chain Jail)"@pt ;
+hxh:ChainJail a hxh:Habilidade ; rdfs:label "Chain Jail"@pt ;
     rdfs:comment "Corrente materializada que só funciona contra membros da Trupe Fantasma."@pt ;
     hxh:categoriaDaHabilidade hxh:Materializacao .
 hxh:EmperorTime a hxh:Habilidade ; rdfs:label "Emperor Time"@pt ;
@@ -311,7 +311,7 @@ hxh:CrazySlots a hxh:Habilidade ; rdfs:label "Crazy Slots"@pt ;
 hxh:BigBangImpact a hxh:Habilidade ; rdfs:label "Big Bang Impact"@pt ;
     rdfs:comment "Soco com a força de um míssil."@pt ;
     hxh:categoriaDaHabilidade hxh:Intensificacao .
-hxh:BodhisattvaCemFormas a hxh:Habilidade ; rdfs:label "Bodhisattva Guanyin de Cem Formas"@pt ;
+hxh:HyakushikiKannon a hxh:Habilidade ; rdfs:label "Hyakushiki Kannon"@pt ;
     rdfs:comment "Estátua gigante de aura que golpeia mais rápido do que o olho acompanha."@pt .
 
 # --- Protagonistas --------------------------------------------------------
@@ -322,7 +322,7 @@ hxh:Gon a hxh:Humano ; rdfs:label "Gon Freecss"@pt ;
     hxh:tipoNenNatural hxh:Intensificacao ;
     hxh:nasceuEm hxh:IlhaDaBaleia ;
     hxh:possuiHabilidade hxh:Jajanken ;
-    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoZoldyck , hxh:ArcoTorreCelestial ,
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoZoldyck , hxh:ArcoArenaCelestial ,
                   hxh:ArcoYorknew , hxh:ArcoGreedIsland , hxh:ArcoFormigas , hxh:ArcoEleicao .
 
 # Killua foi desclassificado no primeiro Exame Hunter que fez.
@@ -333,7 +333,7 @@ hxh:Killua a hxh:Humano , hxh:Assassino ; rdfs:label "Killua Zoldyck"@pt ;
     hxh:nasceuEm hxh:MontanhaKukuroo ;
     hxh:membroDe hxh:FamiliaZoldyck ;
     hxh:possuiHabilidade hxh:Godspeed ;
-    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoZoldyck , hxh:ArcoTorreCelestial ,
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoZoldyck , hxh:ArcoArenaCelestial ,
                   hxh:ArcoYorknew , hxh:ArcoGreedIsland , hxh:ArcoFormigas , hxh:ArcoEleicao .
 
 hxh:Kurapika a hxh:Humano ; rdfs:label "Kurapika"@pt ;
@@ -341,7 +341,7 @@ hxh:Kurapika a hxh:Humano ; rdfs:label "Kurapika"@pt ;
     hxh:possuiLicenca true ;
     hxh:tipoNenNatural hxh:Materializacao ;
     hxh:nasceuEm hxh:ProvinciaLukso ;
-    hxh:possuiHabilidade hxh:CorrenteDaPrisao , hxh:EmperorTime ;
+    hxh:possuiHabilidade hxh:ChainJail , hxh:EmperorTime ;
     hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoYorknew .
 
 hxh:Leorio a hxh:Humano ; rdfs:label "Leorio Paladiknight"@pt ;
@@ -355,7 +355,7 @@ hxh:Leorio a hxh:Humano ; rdfs:label "Leorio Paladiknight"@pt ;
 hxh:Netero a hxh:Humano ; rdfs:label "Isaac Netero"@pt ;
     hxh:possuiLicenca true ;
     hxh:membroDe hxh:AssociacaoHunter ;
-    hxh:possuiHabilidade hxh:BodhisattvaCemFormas ;
+    hxh:possuiHabilidade hxh:HyakushikiKannon ;
     hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoFormigas .
 
 # Não declaramos que Biscuit é Hunter: o raciocinador deduz isso porque
@@ -370,10 +370,10 @@ hxh:Biscuit a hxh:Humano ; rdfs:label "Biscuit Krueger"@pt ;
 hxh:Wing a hxh:Humano ; rdfs:label "Wing"@pt ;
     hxh:tipoNenNatural hxh:Intensificacao ;
     hxh:mestreDe hxh:Gon , hxh:Killua , hxh:Zushi ;
-    hxh:apareceEm hxh:ArcoTorreCelestial .
+    hxh:apareceEm hxh:ArcoArenaCelestial .
 
 hxh:Zushi a hxh:Humano ; rdfs:label "Zushi"@pt ;
-    hxh:apareceEm hxh:ArcoTorreCelestial .
+    hxh:apareceEm hxh:ArcoArenaCelestial .
 
 hxh:Ging a hxh:Humano ; rdfs:label "Ging Freecss"@pt ;
     hxh:numeroDeEstrelas 2 ;
@@ -463,7 +463,7 @@ hxh:Hisoka a hxh:Humano ; rdfs:label "Hisoka Morow"@pt ;
     hxh:tipoNenNatural hxh:Transformacao ;
     hxh:membroDe hxh:TrupeFantasma ;
     hxh:possuiHabilidade hxh:BungeeGum , hxh:TextureSurprise ;
-    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoTorreCelestial , hxh:ArcoYorknew , hxh:ArcoGreedIsland .
+    hxh:apareceEm hxh:ArcoExameHunter , hxh:ArcoArenaCelestial , hxh:ArcoYorknew , hxh:ArcoGreedIsland .
 
 hxh:Shalnark a hxh:Humano ; rdfs:label "Shalnark"@pt ;
     hxh:numeroNaTrupe 6 ;
