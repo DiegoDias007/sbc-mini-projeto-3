@@ -381,10 +381,9 @@ def parte2_sparql(g: Graph) -> None:
         CONSTRUCT { ?p hxh:aprendeComFacilidade ?t }
         WHERE {
             VALUES ?p { hxh:Gon hxh:Killua hxh:Kurapika hxh:Leorio }
-            ?p hxh:tipoNenNatural ?natural .
-            { BIND (?natural AS ?t) }
+            { ?p hxh:tipoNenNatural ?t }
             UNION
-            { ?natural hxh:adjacenteA ?t }
+            { ?p hxh:tipoNenNatural ?natural . ?natural hxh:adjacenteA ?t }
         }
     """, initNs=PREFIXOS).graph
     construido.bind("hxh", HXH)

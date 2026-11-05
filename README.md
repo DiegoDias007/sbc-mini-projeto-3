@@ -242,7 +242,7 @@ O `g.triples((s, p, o))` busca triplas por padrão. O que for `None` funciona co
 | S6 | SELECT + cálculo + agregação | Quais os arcos mais longos e quantos personagens da base aparecem em cada? | Formigas Quimera: 61 episódios, 11 personagens |
 | A1 | **ASK** | Os tipos de Gon e Killua são vizinhos no hexágono? | `True` |
 | A2 | **ASK** | Algum membro da Trupe Fantasma é Hunter? | `True` (Hisoka) |
-| C1 | **CONSTRUCT** | Quais tipos cada protagonista aprende com facilidade? | Um grafo **novo** com 8 triplas `aprendeComFacilidade` |
+| C1 | **CONSTRUCT** | Quais tipos cada protagonista aprende com facilidade? | Um grafo **novo** com 12 triplas `aprendeComFacilidade` |
 
 ### Parte 2: atualizações (a história avança)
 
